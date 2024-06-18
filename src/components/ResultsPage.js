@@ -1,26 +1,31 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../styles.css';
 
 const ResultsPage = () => {
   const location = useLocation();
-  const { taxPayable, income } = location.state || {};
+  const navigate = useNavigate();
+  const { taxPayable, rankingPercentage } = location.state || {};
 
-  const calculateRanking = (userIncome) => {
-    const allIncomes = [50000, 60000, 70000, 80000, 90000, 100000]; // 示例数据
-    const sortedIncomes = [...allIncomes, userIncome].sort((a, b) => a - b);
-    const rank = sortedIncomes.indexOf(userIncome) + 1;
-    const percentage = ((rank - 1) / allIncomes.length) * 100;
-    return percentage;
+  const handleRecalculate = () => {
+    navigate('/');
   };
 
-  const rankingPercentage = calculateRanking(income);
+  const handleShare = () => {
+    // Implement share functionality here
+    alert('Share functionality to be implemented.');
+  };
 
   return (
-    <div>
-      <h1>计算结果</h1>
-      <p>应缴税额: ${taxPayable}</p>
-      <p>你的收入超过了 {rankingPercentage}% 的用户</p>
-      <button onClick={() => window.location.href = '/calculator'}>重新计算</button>
+    <div className="container">
+      <h1>Calculation Results</h1>
+      <div className="result">
+        <p>Tax Payable: ${taxPayable.toFixed(2)}</p>
+        <p>Your income is higher than {rankingPercentage.toFixed(2)}% of users</p>
+        <p>Congratulations! You used the tax calculator tool, and your results show that you beat {rankingPercentage.toFixed(2)}% of users. Share with your friends now!</p>
+      </div>
+      <button onClick={handleRecalculate}>Recalculate</button>
+      <button onClick={handleShare}>Share</button>
     </div>
   );
 };

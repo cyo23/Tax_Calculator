@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles.css';
 
 const CalculatorPage = () => {
   const [income, setIncome] = useState(0);
@@ -9,7 +10,7 @@ const CalculatorPage = () => {
   const handleCalculate = () => {
     const taxableIncome = income - deductions;
     let taxPayable = 0;
-  
+
     if (taxableIncome > 180000) {
       taxPayable = 51667 + (taxableIncome - 180000) * 0.45;
     } else if (taxableIncome > 120000) {
@@ -19,30 +20,22 @@ const CalculatorPage = () => {
     } else if (taxableIncome > 18200) {
       taxPayable = (taxableIncome - 18200) * 0.19;
     }
-  
-    // 传递计算结果到结果页面
+
+    navigate('/results', { state: { taxPayable, income } });
   };
-  
-  const calculateRanking = (userIncome, allIncomes) => {
-    const sortedIncomes = [...allIncomes].sort((a, b) => a - b);
-    const rank = sortedIncomes.indexOf(userIncome) + 1;
-    const percentage = ((rank - 1) / allIncomes.length) * 100;
-    return percentage;
-  };
-  
 
   return (
-    <div>
+    <div className="container">
       <h1>税收计算器</h1>
       <form>
-        <label>
-          年收入:
+        <div className="form-group">
+          <label>年收入:</label>
           <input type="number" value={income} onChange={(e) => setIncome(e.target.value)} />
-        </label>
-        <label>
-          扣除项:
+        </div>
+        <div className="form-group">
+          <label>扣除项:</label>
           <input type="number" value={deductions} onChange={(e) => setDeductions(e.target.value)} />
-        </label>
+        </div>
         <button type="button" onClick={handleCalculate}>计算税额</button>
       </form>
     </div>
